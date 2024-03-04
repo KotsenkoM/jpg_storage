@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+
+  database:
+    image: postgres:14.4-alpine
+    container_name: postgres-db
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgres/data
+    environment:
+      - DB_NAME=${DB_NAME-jpg_storage}
+      - POSTGRES_USER=${POSTGRES_USER-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD-postgres}
+
+  app:
+    build: .
+    container_name: jpg_storage_container
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+    volumes:
+      - ${UPLOAD_HOST_FOLDER}:${UPLOAD_DOCKER_FOLDER}
+    env_file:
+      - .env
+
+volumes:
+  pgdata:

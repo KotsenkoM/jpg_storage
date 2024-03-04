@@ -59,7 +59,7 @@ async def upload_picture(
         file_size = len(await file.read())
         picture = await picture_service.save_picture_to_database(session, file.filename, file_size)
 
-        upload_folder = os.getenv('UPLOAD_FOLDER')
+        upload_folder = os.getenv('UPLOAD_DOCKER_FOLDER')
         file_path = os.path.join(upload_folder, file.filename)
         with open(file_path, 'wb') as f:
             file.file.seek(0)
@@ -82,7 +82,7 @@ async def delete_picture(
     if picture is None:
         raise HTTPException(status_code=404, detail='Изображение не найдено')
 
-    upload_folder = os.getenv('UPLOAD_FOLDER')
+    upload_folder = os.getenv('UPLOAD_DOCKER_FOLDER')
     file_path = os.path.join(upload_folder, picture.name)
     if os.path.exists(file_path):
         os.remove(file_path)
@@ -105,7 +105,7 @@ async def download_picture(
     if picture is None:
         raise HTTPException(status_code=404, detail='Изображение не найдено')
 
-    upload_folder = os.getenv('UPLOAD_FOLDER')
+    upload_folder = os.getenv('UPLOAD_DOCKER_FOLDER')
     file_path = os.path.join(upload_folder, picture.name)
     if os.path.exists(file_path):
         return FileResponse(file_path, media_type='application/octet-stream', filename=picture.name)
@@ -131,14 +131,14 @@ async def download_pictures(
 
     if len(pictures) == 1:
         picture = pictures[0]
-        upload_folder = os.getenv('UPLOAD_FOLDER')
+        upload_folder = os.getenv('UPLOAD_DOCKER_FOLDER')
         file_path = os.path.join(upload_folder, picture.name)
         return FileResponse(file_path, filename=picture.name)
     elif len(pictures) > 1:
         zip_filename = "pictures.zip"
         with zipfile.ZipFile(zip_filename, "w") as zip_file:
             for picture in pictures:
-                upload_folder = os.getenv('UPLOAD_FOLDER')
+                upload_folder = os.getenv('UPLOAD_DOCKER_FOLDER')
                 file_path = os.path.join(upload_folder, picture.name)
                 zip_file.write(file_path, picture.name)
 

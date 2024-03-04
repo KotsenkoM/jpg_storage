@@ -13,3 +13,8 @@ class PictureBase(BaseModel):
     id: int
     name: str
     size: int
+
+
+class GetPicture(BaseModel):
+    name: str
+    size: int

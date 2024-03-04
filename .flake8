@@ -2,6 +2,8 @@
 max-line-length = 118
 exclude =
   venv
+  alembic
+  __init__.py
 ignore =
     #I001: import in the wrong position
     I001,

@@ -11,6 +11,7 @@ class AppSettings(BaseSettings):
     DB_PORT: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
+    UPLOAD_FOLDER: str
 
     class Config:
         env_file = '.env'
